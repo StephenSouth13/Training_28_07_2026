@@ -1,0 +1,22 @@
+[
+  {
+    "AgeGroup": "21-30",
+    "Healthy": 334,
+    "Diabetic": 88
+  },
+  {
+    "AgeGroup": "31-40",
+    "Healthy": 141,
+    "Diabetic": 97
+  },
+  {
+    "AgeGroup": "41-50",
+    "Healthy": 24,
+    "Diabetic": 60
+  },
+  {
+    "AgeGroup": "51+",
+    "Healthy": 1,
+    "Diabetic": 23
+  }
+]

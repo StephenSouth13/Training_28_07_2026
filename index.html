@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UEH Advanced Data Analytics Portal v3.0 — Lab 01</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="header-container">
+      <div>
+        <h1 class="brand-title">UEH Advanced Data Analytics & EDA System</h1>
+        <p class="brand-sub">Hệ thống Tích hợp Thống kê Mô tả, Phân tích Khám phá Dữ liệu & SQL Warehouse (Lab 01)</p>
+      </div>
+      
+      <div class="nav-pills">
+        <button id="btn-tab-diabetes" class="nav-btn active-diabetes">
+          <i data-lucide="activity"></i> BÀI 2: DIABETES
+        </button>
+        <button id="btn-tab-wine" class="nav-btn">
+          <i data-lucide="wine"></i> BÀI 1: WINE QUALITY
+        </button>
+        <button id="btn-tab-sql" class="nav-btn">
+          <i data-lucide="database"></i> SQL WAREHOUSE
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main>
+
+    <!-- SECTION 1: DIABETES MODULE -->
+    <section id="section-diabetes">
+      
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Cỡ Mẫu Nghiên Cứu</div>
+          <div class="kpi-value" style="color: #38bdf8;" id="diab-kpi-patients">768</div>
+          <div class="kpi-sub">Bệnh nhân Pima Indians</div>
+        </div>
+        
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Tỷ Lệ Nhiễm Bệnh Tích Lũy</div>
+          <div class="kpi-value" style="color: #f43f5e;" id="diab-kpi-rate">34.9%</div>
+          <div class="kpi-sub" id="diab-kpi-cases">Dương tính: 268 ca</div>
+        </div>
+        
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Glucose Trung Bình</div>
+          <div class="kpi-value" style="color: #f59e0b;" id="diab-kpi-glucose">121.7 mg/dL</div>
+          <div class="kpi-sub">Imputed zeros with Median</div>
+        </div>
+        
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Chỉ Số BMI Trung Bình</div>
+          <div class="kpi-value" style="color: #10b981;" id="diab-kpi-bmi">32.3 kg/m²</div>
+          <div class="kpi-sub">Dấu hiệu béo phì chủng tộc</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid">
+        <div class="glass-panel chart-card">
+          <div class="chart-header">
+            <div>
+              <span class="chart-badge" style="background: rgba(59,130,246,0.15); color: #60a5fa;">Mục 3.1: Univariate Plot</span>
+              <h3 class="chart-title" style="margin-top: 0.3rem;">Phân Phối Đơn Biến: Nồng Độ Glucose</h3>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-diabetes-univariate"></canvas>
+          </div>
+        </div>
+        
+        <div class="glass-panel chart-card">
+          <div class="chart-header">
+            <div>
+              <span class="chart-badge" style="background: rgba(16,185,129,0.15); color: #34d399;">Mục 3.2: Bivariate Plot</span>
+              <h3 class="chart-title" style="margin-top: 0.3rem;">Chỉ Số Sức Khỏe Trung Bình (Khỏe Mạnh vs Tiểu Đường)</h3>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-diabetes-bivariate"></canvas>
+          </div>
+        </div>
+        
+        <div class="glass-panel chart-card" style="grid-column: span 2;">
+          <div class="chart-header">
+            <div>
+              <span class="chart-badge" style="background: rgba(245,158,11,0.15); color: #fbbf24;">Mục 1.2: Cross-Tabulation</span>
+              <h3 class="chart-title" style="margin-top: 0.3rem;">Mật Độ Ca Bệnh Tích Lũy Theo Nhóm Tuổi</h3>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="chart-diabetes-age"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clinical Insights Card -->
+      <div class="glass-panel insight-card">
+        <div class="insight-header">
+          <i data-lucide="file-text"></i> Báo Cáo Nhận Xét Và Giải Trình Thống Kê Lâm Sàng (Diabetes EDA Report)
+        </div>
+        <div class="insight-grid">
+          <div class="insight-box">
+            <p style="color: #f59e0b; font-weight: 700; margin-bottom: 0.3rem;">1. Đánh giá dải phân phối & Tính lệch (Skewness):</p>
+            Biểu đồ phân phối đơn biến chỉ ra nồng độ <strong>Glucose</strong> hội tụ quanh vùng trung vị <span style="color: #38bdf8; font-family: var(--font-mono); font-weight: 700;">117 mg/dL</span>. Tuy nhiên dải phân phối kéo dài về phía bên phải (Right-skewed) với giá trị Max đạt tới <span style="color: #f43f5e; font-family: var(--font-mono);">199 mg/dL</span>, minh chứng cho sự xuất hiện của nhóm đối tượng có lượng đường huyết cực đoan cao.
+          </div>
+          
+          <div class="insight-box">
+            <p style="color: #10b981; font-weight: 700; margin-bottom: 0.3rem;">2. Phân tích ngoại lai (Outliers) & Khoảng biến thiên:</p>
+            Chỉ số <strong>Insulin</strong> có khoảng biến thiên (Range) rộng nhất nội tại mô hình (từ 18 đến 846 $\mu U/mL$). Với khoảng tứ phân vị IQR lớn lên tới <span style="color: #f59e0b; font-family: var(--font-mono); font-weight: 700;">127.5</span>, dữ liệu chứa lượng Outliers lớn ở biên cao. Phương pháp điền khuyết bằng Trung vị (Median = 125) đã được áp dụng thành công nhằm cô lập nhiễu.
+          </div>
+          
+          <div class="insight-box" style="grid-column: span 2;">
+            <p style="color: #38bdf8; font-weight: 700; margin-bottom: 0.3rem;">3. Xu thế phân bố bệnh lý theo độ tuổi (Cross-tabulation Insight):</p>
+            Kết quả kiểm định chéo nhóm tuổi chứng minh: Tỷ lệ mắc bệnh tích lũy tăng phi mã khi bước qua tuổi 30. Ở phân khúc <strong>21-30 tuổi</strong>, số ca khỏe mạnh áp đảo hoàn toàn; tuy nhiên ở dải từ <strong>31-50 tuổi</strong>, mật độ ca bệnh lý chiếm tới gần <span style="color: #f43f5e; font-weight: 700;">50%</span> tổng cỡ mẫu nhóm, xác nhận tuổi tác là biến độc lập có trọng số rủi ro tác động rất cao.
+          </div>
+        </div>
+      </div>
+
+      <!-- Statistical Matrix Table Card -->
+      <div class="glass-panel table-card">
+        <div class="table-header-bar">
+          <div class="table-title" style="color: #10b981;">
+            <i data-lucide="table"></i> MA TRẬN THỐNG KÊ MÔ TẢ TOÀN DIỆN BÀI 2 (DIABETES)
+          </div>
+          <input type="text" id="search-diabetes-table" class="search-input" placeholder="Tìm kiếm tính trạng...">
+        </div>
+        
+        <div class="table-wrapper">
+          <table id="table-diabetes-stats">
+            <thead>
+              <tr>
+                <th>Features</th>
+                <th style="color: #38bdf8;">Mean</th>
+                <th>Median</th>
+                <th>Mode</th>
+                <th>Variance</th>
+                <th>Std Dev</th>
+                <th style="color: #10b981;">Min</th>
+                <th style="color: #818cf8;">Q1 (25%)</th>
+                <th style="color: #c084fc;">Q3 (75%)</th>
+                <th style="color: #f43f5e;">Max</th>
+                <th style="color: #fbbf24;">IQR</th>
+                <th>Skewness</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamic Rows inserted via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 2: WINE QUALITY MODULE -->
+    <section id="section-wine" class="hidden">
+      
+      <!-- Wine KPI Grid -->
+      <div class="kpi-grid">
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Tổng Mẫu Vang Đỏ</div>
+          <div class="kpi-value" style="color: #f43f5e;" id="wine-kpi-red">1,599</div>
+          <div class="kpi-sub">Tệp thực tế winequality-red</div>
+        </div>
+        
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Tổng Mẫu Vang Trắng</div>
+          <div class="kpi-value" style="color: #f8fafc;" id="wine-kpi-white">4,898</div>
+          <div class="kpi-sub">Tệp thực tế winequality-white</div>
+        </div>
+        
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Điểm Chất Lượng Đỏ TB</div>
+          <div class="kpi-value" style="color: #f43f5e;" id="wine-kpi-red-q">5.64 ⭐</div>
+          <div class="kpi-sub">Thẩm định chuyên gia</div>
+        </div>
+        
+        <div class="glass-panel kpi-card">
+          <div class="kpi-title">Điểm Chất Lượng Trắng TB</div>
+          <div class="kpi-value" style="color: #f59e0b;" id="wine-kpi-white-q">5.88 ⭐</div>
+          <div class="kpi-sub">Thẩm định chuyên gia</div>
+        </div>
+      </div>
+
+      <!-- Bivariate Trend Chart Card -->
+      <div class="glass-panel chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div>
+            <span class="chart-badge" style="background: rgba(168,85,247,0.15); color: #c084fc;">Mục 3.2: Bivariate Trend Lines</span>
+            <h3 class="chart-title" style="margin-top: 0.3rem;">Xu Hướng Nồng Độ Cồn (Alcohol) Biến Thiên Theo Điểm Chất Lượng</h3>
+          </div>
+        </div>
+        <div class="chart-container" style="height: 320px;">
+          <canvas id="chart-wine-trend"></canvas>
+        </div>
+      </div>
+
+      <!-- Oenological Insights Card -->
+      <div class="glass-panel insight-card" style="border-left-color: #a855f7;">
+        <div class="insight-header" style="color: #a855f7;">
+          <i data-lucide="award"></i> Báo Cáo Nhận Xét Và Giải Trình Cấu Trúc Hóa Học Rượu (Wine Quality EDA Report)
+        </div>
+        <div class="insight-grid">
+          <div class="insight-box">
+            <p style="color: #f43f5e; font-weight: 700; margin-bottom: 0.3rem;">1. Phân bố điểm Chất lượng & Độ tập trung:</p>
+            Dữ liệu thực nghiệm của cả vang đỏ và vang trắng chỉ ra điểm số chất lượng tập trung nén cực mạnh ở phân khúc tầm trung là <strong>Điểm 5 và Điểm 6</strong> (thể hiện rõ qua giá trị Mode và Median đều bằng 6). Các chai rượu đạt điểm xuất sắc (Điểm 8, Điểm 9) chiếm tỷ lệ cực kỳ khan hiếm trong dải mẫu, phân phối tiệm cận hình chuông chuẩn Gauss.
+          </div>
+          
+          <div class="insight-box">
+            <p style="color: #f59e0b; font-weight: 700; margin-bottom: 0.3rem;">2. Tác động của Nồng độ cồn (Alcohol) - Phân tích hai biến:</p>
+            Nhìn vào đồ thị đường xu hướng hai biến, có một quy luật hóa sinh nhất quán: <strong>Nồng độ cồn tỷ lệ thuận mạnh mẽ với chất lượng rượu</strong>. Những chai rượu đạt điểm cao nhất luôn sở hữu hàm lượng cồn vượt trội (trung bình trên <span style="color: #f59e0b; font-family: var(--font-mono); font-weight: 700;">11.5% - 12%</span>), trong khi nhóm rượu chất lượng thấp (Điểm 3, Điểm 4) bị kéo tụt nồng độ cồn xuống ngưỡng đáy sinh học.
+          </div>
+          
+          <div class="insight-box" style="grid-column: span 2;">
+            <p style="color: #c084fc; font-weight: 700; margin-bottom: 0.3rem;">3. So sánh đối chứng lý thuyết hóa học đặc trưng (Red vs White):</p>
+            Ma trận dữ liệu bóc tách sự khác biệt bản chất: Vang đỏ có chỉ số axit biến đổi (<span style="font-family: var(--font-mono); color: #f43f5e;">volatile acidity</span>) trung bình cao hơn rõ rệt để định hình hương vị chát nồng, trong khi lượng đường tồn dư (<span style="font-family: var(--font-mono); color: #f59e0b;">residual sugar</span>) của vang trắng lại sở hữu trung vị (Median) và khoảng IQR vượt bậc, minh chứng cho lý thuyết vang trắng luôn có dải vị ngọt đậm đà và dải phân phối biến động mạnh hơn vang đỏ.
+          </div>
+        </div>
+      </div>
+
+      <!-- Wine Statistical Matrix Table Card -->
+      <div class="glass-panel table-card">
+        <div class="table-header-bar">
+          <div class="table-title" style="color: #c084fc;">
+            <i data-lucide="table"></i> MA TRẬN THỐNG KÊ ĐẶC TÍNH HÓA HỌC KHẢO SÁT CHƯƠNG 1
+          </div>
+          <div class="sub-switch">
+            <button id="btn-wine-matrix-red" class="sub-btn active">RED WINE MATRIX</button>
+            <button id="btn-wine-matrix-white" class="sub-btn">WHITE WINE MATRIX</button>
+          </div>
+        </div>
+        
+        <div class="table-wrapper">
+          <table id="table-wine-stats">
+            <thead>
+              <tr>
+                <th>Chemical Features</th>
+                <th style="color: #c084fc;">Mean</th>
+                <th>Median</th>
+                <th>Mode</th>
+                <th>Variance</th>
+                <th>Std Dev</th>
+                <th style="color: #10b981;">Min</th>
+                <th style="color: #818cf8;">Q1 (25%)</th>
+                <th style="color: #c084fc;">Q3 (75%)</th>
+                <th style="color: #f43f5e;">Max</th>
+                <th style="color: #fbbf24;">IQR</th>
+                <th>Skewness</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Dynamic Rows inserted via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SECTION 3: SQL WAREHOUSE INSPECTOR -->
+    <section id="section-sql" class="hidden">
+      
+      <div class="glass-panel chart-card" style="margin-bottom: 1.5rem;">
+        <div class="chart-header">
+          <div>
+            <span class="chart-badge" style="background: rgba(59,130,246,0.15); color: #60a5fa;">SQL Data Warehouse Architecture</span>
+            <h3 class="chart-title" style="margin-top: 0.3rem;">Truy Vấn DDL Schema & Các Câu Truy Vấn Phân Tích Nâng Cao</h3>
+          </div>
+        </div>
+        
+        <div class="sql-container">
+          <div>
+            <h4 style="font-size: 0.85rem; color: #38bdf8; margin-bottom: 0.5rem; font-weight: 700;">1. Database DDL Schema (sql/schema.sql)</h4>
+            <pre class="code-block"><code id="sql-schema-code">-- SQL Schema Loading...</code></pre>
+          </div>
+          
+          <div>
+            <h4 style="font-size: 0.85rem; color: #c084fc; margin-bottom: 0.5rem; font-weight: 700;">2. Analytical & BI Queries (sql/analytical_queries.sql)</h4>
+            <pre class="code-block"><code id="sql-analytical-code">-- Analytical Queries Loading...</code></pre>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Application Controller JS -->
+  <script src="app.js"></script>
+</body>
+</html>

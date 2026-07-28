@@ -1,0 +1,16 @@
+[
+  {
+    "Outcome": 0,
+    "Glucose": 110.2,
+    "BloodPressure": 67.5,
+    "BMI": 30.4,
+    "Insulin": 134.0
+  },
+  {
+    "Outcome": 1,
+    "Glucose": 142.0,
+    "BloodPressure": 74.6,
+    "BMI": 36.0,
+    "Insulin": 170.2
+  }
+]

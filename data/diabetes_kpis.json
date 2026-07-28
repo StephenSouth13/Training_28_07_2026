@@ -1,0 +1,8 @@
+{
+  "total_patients": 768,
+  "dataset_shape": "(768, 9)",
+  "diabetes_rate": 34.9,
+  "diabetic_cases": 268,
+  "avg_glucose": 121.3,
+  "avg_bmi": 32.4
+}
