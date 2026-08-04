@@ -1,0 +1,2 @@
+-- My Practice SQL File
+-- Write your SQL queries here from scratch!
